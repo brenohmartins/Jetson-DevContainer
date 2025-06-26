@@ -1,0 +1,12 @@
+# Pastas de compilação do Docker e Colcon
+build/
+install/
+log/
+
+# Arquivos de cache do Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Configurações de editores de código
+.vscode/
