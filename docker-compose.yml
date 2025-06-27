@@ -1,4 +1,3 @@
-
 services:
   # Nome do nosso serviço principal
   ros_dev:
@@ -8,12 +7,16 @@ services:
     container_name: JetsonContainer
     # Mantém o container rodando mesmo que não haja um comando em primeiro plano
     tty: true
-    
+    # ADICIONE ESTA LINHA para acesso à GPU NVIDIA
+    runtime: nvidia
+
     # pasta de código.
     volumes:
       - ./jetson_ws/src:/root/ros_ws/src
       # Permite a conexão com a tela do seu PC.
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      # ADICIONE ESTA LINHA para compartilhar a "chave" de autenticação gráfica
+      - /home/jetson/.Xauthority:/home/jetson/.Xauthority:rw
       
     # RECOMENDADO: Simplifica muito a rede e a comunicação com a interface gráfica.
     network_mode: "host"
@@ -24,3 +27,5 @@ services:
     environment:
       - DISPLAY
       - QT_X11_NO_MITSHM=1
+      # ADICIONE ESTA LINHA para dizer aos programas onde encontrar a chave
+      - XAUTHORITY=/home/jetson/.Xauthority
