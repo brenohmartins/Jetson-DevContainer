@@ -5,7 +5,7 @@ services:
     # Diz ao Compose para construir a imagem a partir do Dockerfile no diretório atual ('.')
     build: .
     # O nome que você escolheu para o container. Perfeito.
-    container_name: DockerTest
+    container_name: JetsonContainer
     # Mantém o container rodando mesmo que não haja um comando em primeiro plano
     tty: true
     
