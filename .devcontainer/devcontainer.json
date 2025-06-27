@@ -1,0 +1,31 @@
+{
+  // Nome do seu ambiente, que aparecerá no VS Code.
+  "name": "ROS 2 Jazzy - Dev Environment",
+
+  // Caminho para o seu arquivo docker-compose.yml existente.
+  // ".." significa que ele está na pasta pai da pasta .devcontainer.
+  "dockerComposeFile": [
+    "../docker-compose.yml"
+  ],
+
+  // O NOME DO SERVIÇO dentro do seu docker-compose.yml que o VS Code deve usar.
+  // No nosso exemplo, o serviço se chama "ros_dev".
+  "service": "ros_dev",
+
+  // A pasta que o VS Code deve abrir por padrão quando se conectar ao container.
+  "workspaceFolder": "/root/ros_ws",
+
+  // [OPCIONAL, MAS MUITO RECOMENDADO]
+  // Personalizações para o VS Code DENTRO do container.
+  "customizations": {
+    "vscode": {
+      // Lista de extensões que serão instaladas automaticamente no container
+      // para te dar uma experiência de desenvolvimento completa.
+      "extensions": [
+        "ms-vscode.cpptools",
+        "ms-python.python",
+        "ms-iot.vscode-ros"
+      ]
+    }
+  }
+}
