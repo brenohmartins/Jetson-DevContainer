@@ -14,6 +14,8 @@ RUN apt-get update && apt-get install -y \
     ros-jazzy-rtabmap-ros \
     # adicona o rviz2
     ros-jazzy-rviz2 \
+    # adiciona o freenect-ros que baixa automaticamente o driver do freenectlib
+    ros-jazzy-freenect-camera \
     && rm -rf /var/lib/apt/lists/*
 
 # Criação do Workspace ROS: Define o local de trabalho dentro do container
