@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
     ros-jazzy-demo-nodes-cpp \
     ros-jazzy-demo-nodes-py \
     #pacote do rtabmap
-    ros ros-jazzy-rtabmap \
+    ros-jazzy-rtabmap \
     && rm -rf /var/lib/apt/lists/*
 
 # Criação do Workspace ROS: Define o local de trabalho dentro do container
