@@ -10,6 +10,10 @@ services:
     # ADICIONE ESTA LINHA para acesso à GPU NVIDIA
     runtime: nvidia
 
+    devices:
+      # Mapeia o dispositivo da câmera da Jetson para dentro do container
+      - "/dev/video0:/dev/video0"
+
     # pasta de código.
     volumes:
       - ./jetson_ws/src:/root/ros_ws/src
