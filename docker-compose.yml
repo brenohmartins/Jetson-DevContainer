@@ -1,20 +1,26 @@
-# Versão do Docker Compose
-version: '3.8'
 
-# Define os serviços (containers) que fazem parte do projeto
 services:
   # Nome do nosso serviço principal
   ros_dev:
     # Diz ao Compose para construir a imagem a partir do Dockerfile no diretório atual ('.')
     build: .
-    # Nome que daremos ao container quando ele estiver rodando
+    # O nome que você escolheu para o container. Perfeito.
     container_name: DockerTest
     # Mantém o container rodando mesmo que não haja um comando em primeiro plano
     tty: true
-    # Mapeia a pasta 'src' do seu PC para a pasta 'src' do workspace dentro do container.
-    # Esta é a mágica que permite editar o código no PC e compilar no container.
+    
+    # pasta de código.
     volumes:
-      - ./src:/root/ros_ws/src
-    environment:  #faz com que tenha acesso a tela do pc 
-      - DISPLAY=${DISPLAY}
+      - ./jetson_ws/src:/root/ros_ws/src
+      # Permite a conexão com a tela do seu PC.
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      
+    # RECOMENDADO: Simplifica muito a rede e a comunicação com a interface gráfica.
+    network_mode: "host"
+    ipc: "host"
+    
+    # Suas variáveis de ambiente para a tela.
+    # Usar apenas 'DISPLAY' funciona melhor com network_mode: "host".
+    environment:
+      - DISPLAY
       - QT_X11_NO_MITSHM=1
