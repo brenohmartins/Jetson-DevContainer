@@ -10,6 +10,11 @@ services:
     # ADICIONE ESTA LINHA para acesso à GPU NVIDIA
     runtime: nvidia
 
+    # ================================================================
+    # --- ADICIONE ESTA LINHA PARA PERMISSÃO TOTAL DE HARDWARE ---
+    privileged: true
+    # ================================================================
+
     devices:
       # Mapeia o dispositivo da câmera da Jetson para dentro do container
       - "/dev/video0:/dev/video0"
