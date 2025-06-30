@@ -5,7 +5,12 @@ FROM ros:jazzy
 # As dependências são as mesmas, pois ambos os wrappers precisam do libfreenect e de ferramentas de build.
 RUN apt-get update && apt-get install -y \
     vim git cmake build-essential pkg-config libusb-1.0-0-dev freeglut3-dev \
-    ros-dev-tools ros-jazzy-rtabmap-ros ros-jazzy-rviz2 ros-jazzy-camera-info-manager \
+    ros-dev-tools \
+    ros-jazzy-rtabmap-ros \
+    ros-jazzy-rviz2 \
+    ros-jazzy-camera-info-manager \
+    # ADICIONE A DEPENDÊNCIA QUE FALTA AQUI:
+    ros-jazzy-depth-image-proc \
     && rm -rf /var/lib/apt/lists/*
 
 # --- ETAPA 3: COMPILAR E INSTALAR O DRIVER BASE (libfreenect) ---
