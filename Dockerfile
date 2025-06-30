@@ -1,37 +1,39 @@
 # --- ETAPA 1: IMAGEM BASE ---
-# Começamos com a imagem oficial do ROS 2 Jazzy, que já vem com Ubuntu 24.04.
 FROM ros:jazzy
 
 # --- ETAPA 2: INSTALAÇÃO DE DEPENDÊNCIAS DO SISTEMA ---
-# Instalamos o essencial para compilar o libfreenect com seus exemplos gráficos.
+# As dependências são as mesmas, pois ambos os wrappers precisam do libfreenect e de ferramentas de build.
 RUN apt-get update && apt-get install -y \
-    git \
-    cmake \
-    vim \
-    build-essential \
-    pkg-config \
-    libusb-1.0-0-dev \
-    freeglut3-dev \
+    vim git cmake build-essential pkg-config libusb-1.0-0-dev freeglut3-dev \
+    ros-dev-tools ros-jazzy-rtabmap-ros ros-jazzy-rviz2 ros-jazzy-camera-info-manager \
     && rm -rf /var/lib/apt/lists/*
 
-# --- ETAPA 3: COMPILAR E INSTALAR O DRIVER BASE (libfreenect) COM EXEMPLOS ---
-# Isso garante que a biblioteca principal E os programas de teste do Kinect estejam disponíveis.
+# --- ETAPA 3: COMPILAR E INSTALAR O DRIVER BASE (libfreenect) ---
+# Esta etapa continua idêntica, pois ambos os pacotes ROS precisam desta biblioteca base.
 WORKDIR /tmp
-RUN git clone https://github.com/OpenKinect/libfreenect.git && \
+RUN GIT_TERMINAL_PROMPT=0 git clone https://github.com/OpenKinect/libfreenect.git && \
     cd libfreenect && \
     mkdir build && cd build && \
-    # CORREÇÃO APLICADA: Removemos a flag -DBUILD_EXAMPLES=OFF para que o freenect-glview seja compilado.
-    cmake .. && \
+    cmake .. -DBUILD_EXAMPLES=OFF -DBUILD_REDIST_PACKAGE=OFF && \
     make && \
     make install && \
     ldconfig && \
     cd / && rm -rf /tmp/libfreenect
 
+# --- ETAPA 4: PREPARAR, CORRIGIR E COMPILAR O WORKSPACE ROS ---
+WORKDIR /root/ros_ws
 
-# WORKDIR /root/ros_ws
-# RUN git clone https://github.com/ros-drivers/freenect_camera.git -b ros2 src/freenect_camera
-# RUN . /opt/ros/jazzy/setup.sh && colcon build
+# 4.1: Clona o repositório que você especificou na pasta src.
+RUN GIT_TERMINAL_PROMPT=0 git clone https://github.com/fadlio/kinect_ros2.git src/kinect_ros2
+
+# 4.2: CORREÇÃO AUTOMÁTICA: Aplica a correção do cv_bridge.h para .hpp
+# Este comando 'sed' encontra e substitui o texto no arquivo para garantir a compatibilidade com Jazzy.
+RUN sed -i 's/cv_bridge.h/cv_bridge.hpp/g' src/kinect_ros2/include/kinect_ros2/kinect_ros2_component.hpp
+
+# 4.3: Executa o colcon build para compilar o pacote já corrigido.
+RUN . /opt/ros/jazzy/setup.sh && colcon build
 
 # --- ETAPA 5: CONFIGURAÇÃO FINAL DO AMBIENTE ---
-# Apenas o source principal do ROS é suficiente por enquanto.
-RUN echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc
+# Continua igual, configurando o terminal para carregar o ROS automaticamente.
+RUN echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc && \
+    echo "if [ -f /root/ros_ws/install/setup.bash ]; then source /root/ros_ws/install/setup.bash; fi" >> ~/.bashrc
