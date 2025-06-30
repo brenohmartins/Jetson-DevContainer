@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
     ros-jazzy-camera-info-manager \
     # ADICIONE A DEPENDÊNCIA QUE FALTA AQUI:
     ros-jazzy-depth-image-proc \
+    ros-jazzy-image-tools \
     && rm -rf /var/lib/apt/lists/*
 
 # --- ETAPA 3: COMPILAR E INSTALAR O DRIVER BASE (libfreenect) ---
