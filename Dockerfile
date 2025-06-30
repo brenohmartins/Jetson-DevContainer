@@ -22,11 +22,11 @@ RUN apt-get update && apt-get install -y \
     # Limpa o cache do apt para manter a imagem pequena
     && rm -rf /var/lib/apt/lists/*
 
-# --- ETAPA 3: COMPILAR E INSTALAR O DRIVER BASE (libfreenect) ---
 # Isso garante que a biblioteca principal do Kinect esteja disponível para todo o sistema dentro do container.
 # Usamos uma pasta temporária que será removida para não sujar a imagem final.
 WORKDIR /tmp
-RUN git clone https://github.com/OpenKinect/libfreenect.git && \
+# dependencias do libfreenect
+RUN git clone git://github.com/OpenKinect/libfreenect.git && \
     cd libfreenect && \
     mkdir build && cd build && \
     cmake .. -DBUILD_EXAMPLES=OFF -DBUILD_REDIST_PACKAGE=OFF && \
@@ -35,12 +35,11 @@ RUN git clone https://github.com/OpenKinect/libfreenect.git && \
     ldconfig && \
     cd / && rm -rf /tmp/libfreenect
 
-# --- ETAPA 4: PREPARAR E COMPILAR O WORKSPACE ROS ---
 # Define o nosso workspace de trabalho final
 WORKDIR /root/ros_ws
 
 # Clona o pacote ROS freenect_camera (o wrapper) na pasta src do nosso workspace
-RUN git clone https://github.com/ros-drivers/freenect_camera.git -b ros2 src/freenect_camera
+RUN git clone git://github.com/ros-drivers/freenect_camera.git -b ros2 src/freenect_camera
 
 # Executa o colcon build para compilar o freenect_camera e qualquer outro pacote que você colocar na pasta src.
 # O 'source' garante que o ambiente ROS está ativo para a compilação.
