@@ -1,27 +1,52 @@
-# chamanado a imagem oficial do ROS 2 Jazzy, que já vem com Ubuntu 24.04.
+# --- ETAPA 1: IMAGEM BASE ---
+# Começamos com a imagem oficial do ROS 2 Jazzy, que já vem com Ubuntu 24.04 para a arquitetura ARM64.
 FROM ros:jazzy
 
-# 2. Instalação de Dependências:
+# --- ETAPA 2: INSTALAÇÃO DE DEPENDÊNCIAS DO SISTEMA ---
+# Instalamos todas as ferramentas e bibliotecas que precisaremos para compilar TUDO do zero.
 RUN apt-get update && apt-get install -y \
-    vim \
+    # Ferramentas básicas de desenvolvimento
     git \
+    cmake \
+    vim \
+    build-essential \
+    pkg-config \
+    libusb-1.0-0-dev \
+    freeglut3-dev \
+    # Ferramentas do ROS
     ros-dev-tools \
-    ros-jazzy-turtlesim \
-    # pacotes demo do ros jazzy para teste do ros no contianer para teste de ros
-    ros-jazzy-demo-nodes-cpp \
-    ros-jazzy-demo-nodes-py \
-    # adiciona o rtab map
+    # Pacotes ROS que usaremos ou que são dependências
     ros-jazzy-rtabmap-ros \
-    # adicona o rviz2
     ros-jazzy-rviz2 \
-    # adiciona o freenect-ros que baixa automaticamente o driver do freenectlib
-    ros-jazzy-freenect-camera \
+    ros-jazzy-camera-info-manager \
+    # Limpa o cache do apt para manter a imagem pequena
     && rm -rf /var/lib/apt/lists/*
 
-# Criação do Workspace ROS: Define o local de trabalho dentro do container
+# --- ETAPA 3: COMPILAR E INSTALAR O DRIVER BASE (libfreenect) ---
+# Isso garante que a biblioteca principal do Kinect esteja disponível para todo o sistema dentro do container.
+# Usamos uma pasta temporária que será removida para não sujar a imagem final.
+WORKDIR /tmp
+RUN git clone https://github.com/OpenKinect/libfreenect.git && \
+    cd libfreenect && \
+    mkdir build && cd build && \
+    cmake .. -DBUILD_EXAMPLES=OFF -DBUILD_REDIST_PACKAGE=OFF && \
+    make && \
+    make install && \
+    ldconfig && \
+    cd / && rm -rf /tmp/libfreenect
+
+# --- ETAPA 4: PREPARAR E COMPILAR O WORKSPACE ROS ---
+# Define o nosso workspace de trabalho final
 WORKDIR /root/ros_ws
 
-# Configuração do Ambiente: Garante que o ROS seja "sourceado" automaticamente
-RUN echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc
-#verifica se o arquivo install/setup.bash existe, evita o erro quando você entra em um container pela primeira vez
-RUN echo "if [ -f /root/ros_ws/install/setup.bash ]; then source /root/ros_ws/install/setup.bash; fi" >> ~/.bashrc
+# Clona o pacote ROS freenect_camera (o wrapper) na pasta src do nosso workspace
+RUN git clone https://github.com/ros-drivers/freenect_camera.git -b ros2 src/freenect_camera
+
+# Executa o colcon build para compilar o freenect_camera e qualquer outro pacote que você colocar na pasta src.
+# O 'source' garante que o ambiente ROS está ativo para a compilação.
+RUN . /opt/ros/jazzy/setup.sh && colcon build
+
+# --- ETAPA 5: CONFIGURAÇÃO FINAL DO AMBIENTE ---
+# Configura o terminal para já ter o ROS ativado por padrão, incluindo nosso workspace local já compilado.
+RUN echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc && \
+    echo "if [ -f /root/ros_ws/install/setup.bash ]; then source /root/ros_ws/install/setup.bash; fi" >> ~/.bashrc
