@@ -39,7 +39,7 @@ RUN git clone git://github.com/OpenKinect/libfreenect.git && \
 WORKDIR /root/ros_ws
 
 # Clona o pacote ROS freenect_camera (o wrapper) na pasta src do nosso workspace
-RUN git clone git://github.com/ros-drivers/freenect_camera.git -b ros2 src/freenect_camera
+RUN git clone https://github.com/ros-drivers/freenect_camera.git -b ros2 src/freenect_camera
 
 # Executa o colcon build para compilar o freenect_camera e qualquer outro pacote que você colocar na pasta src.
 # O 'source' garante que o ambiente ROS está ativo para a compilação.
