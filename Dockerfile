@@ -45,7 +45,6 @@ RUN git clone https://github.com/ros-drivers/freenect_camera.git -b ros2 src/fre
 # O 'source' garante que o ambiente ROS está ativo para a compilação.
 RUN . /opt/ros/jazzy/setup.sh && colcon build
 
-# --- ETAPA 5: CONFIGURAÇÃO FINAL DO AMBIENTE ---
 # Configura o terminal para já ter o ROS ativado por padrão, incluindo nosso workspace local já compilado.
 RUN echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc && \
     echo "if [ -f /root/ros_ws/install/setup.bash ]; then source /root/ros_ws/install/setup.bash; fi" >> ~/.bashrc
