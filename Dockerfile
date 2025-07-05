@@ -17,7 +17,8 @@ WORKDIR /tmp
 RUN GIT_TERMINAL_PROMPT=0 git clone https://github.com/OpenKinect/libfreenect.git && \
     cd libfreenect && \
     mkdir build && cd build && \
-    cmake .. -DBUILD_EXAMPLES=OFF -DBUILD_REDIST_PACKAGE=OFF && \
+    # flag to dont build libfreenect -DBUILD_EXAMPLES=OFF -DBUILD_REDIST_PACKAGE=OFF
+    cmake .. && \
     make && \
     make install && \
     ldconfig && \
