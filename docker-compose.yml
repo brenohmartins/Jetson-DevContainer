@@ -1,19 +1,16 @@
 services:
-  # Nome do nosso serviço principal
   ros_dev:
     # Diz ao Compose para construir a imagem a partir do Dockerfile no diretório atual ('.')
     build: .
-    # O nome que você escolheu para o container. Perfeito.
+
     container_name: JetsonContainer
     # Mantém o container rodando mesmo que não haja um comando em primeiro plano
     tty: true
-    # ADICIONE ESTA LINHA para acesso à GPU NVIDIA
+    # acesso à GPU NVIDIA
     runtime: nvidia
 
-    # ================================================================
-    # --- ADICIONE ESTA LINHA PARA PERMISSÃO TOTAL DE HARDWARE ---
+    # PERMISSÃO TOTAL DE HARDWARE
     privileged: true
-    # ================================================================
 
     devices:
       # Mapeia o dispositivo da câmera da Jetson para dentro do container
@@ -24,17 +21,16 @@ services:
       - ./jetson_ws/src:/root/ros_ws/src
       # Permite a conexão com a tela do seu PC.
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
-      # ADICIONE ESTA LINHA para compartilhar a "chave" de autenticação gráfica
       - /home/jetson/.Xauthority:/home/jetson/.Xauthority:rw
+      # mapeia as portas USB
+      - /dev/bus/usb:/dev/bus/usb
       
     # RECOMENDADO: Simplifica muito a rede e a comunicação com a interface gráfica.
     network_mode: "host"
     ipc: "host"
     
-    # Suas variáveis de ambiente para a tela.
-    # Usar apenas 'DISPLAY' funciona melhor com network_mode: "host".
     environment:
       - DISPLAY
       - QT_X11_NO_MITSHM=1
-      # ADICIONE ESTA LINHA para dizer aos programas onde encontrar a chave
+      # diz aos programas onde encontrar a chave
       - XAUTHORITY=/home/jetson/.Xauthority
