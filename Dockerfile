@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # comando para instalar o pyserial
-RUN pip3 install pyserial
+#RUN pip3 install pyserial
 
 WORKDIR /tmp
 RUN GIT_TERMINAL_PROMPT=0 git clone https://github.com/OpenKinect/libfreenect.git && \
