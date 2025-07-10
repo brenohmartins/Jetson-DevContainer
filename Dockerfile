@@ -27,7 +27,8 @@ RUN GIT_TERMINAL_PROMPT=0 git clone https://github.com/OpenKinect/libfreenect.gi
 
 WORKDIR /root/ros_ws
 
-
+# clones de pacotes ROS que irão ser tuilizados na jetson
+RUN GIT_TERMINAL_PROMPT=0 git clone https://github.com/mjstn/xv_11_driver.git src/xv_11_driver
 RUN GIT_TERMINAL_PROMPT=0 git clone https://github.com/fadlio/kinect_ros2.git src/kinect_ros2
 
 
