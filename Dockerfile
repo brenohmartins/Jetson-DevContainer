@@ -28,8 +28,8 @@ RUN GIT_TERMINAL_PROMPT=0 git clone https://github.com/OpenKinect/libfreenect.gi
 WORKDIR /root/ros_ws
 
 # clones de pacotes ROS que irão ser tuilizados na jetson
-RUN GIT_TERMINAL_PROMPT=0 git clone https://github.com/mjstn/xv_11_driver.git src/xv_11_driver
-RUN GIT_TERMINAL_PROMPT=0 git clone https://github.com/n1kn4x/xv11_lidar_python.git src/kinect_ros2
+RUN GIT_TERMINAL_PROMPT=0 git clone https://github.com/n1kn4x/xv11_lidar_python.git src/xv_11_driver
+RUN GIT_TERMINAL_PROMPT=0 git clone https://github.com/fadlio/kinect_ros2.git src/kinect_ros2
 
 
 # comando 'sed' encontra e substitui o texto no arquivo para garantir a compatibilidade com Jazzy.
