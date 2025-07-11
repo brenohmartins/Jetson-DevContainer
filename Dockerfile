@@ -4,6 +4,7 @@ FROM ros:jazzy
 RUN apt-get update && apt-get install -y \
     vim git cmake build-essential pkg-config libusb-1.0-0-dev freeglut3-dev \
     python3-pip \
+    python3-serial \
     ros-dev-tools \
     ros-jazzy-rtabmap-ros \
     ros-jazzy-rviz2 \
@@ -12,8 +13,6 @@ RUN apt-get update && apt-get install -y \
     ros-jazzy-image-tools \
     && rm -rf /var/lib/apt/lists/*
 
-# comando para instalar o pyserial
-#RUN pip3 install pyserial
 
 WORKDIR /tmp
 RUN GIT_TERMINAL_PROMPT=0 git clone https://github.com/OpenKinect/libfreenect.git && \
