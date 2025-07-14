@@ -18,7 +18,7 @@ services:
 
     # pasta de código.
     volumes:
-      - ./jetson_ws:/root/ros_ws
+      - ./jetson_ws/src:/root/ros_ws/src
       # Permite a conexão com a tela do seu PC.
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - /home/jetson/.Xauthority:/home/jetson/.Xauthority:rw
