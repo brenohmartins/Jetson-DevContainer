@@ -25,7 +25,6 @@ services:
       # mapeia as portas USB
       - /dev/bus/usb:/dev/bus/usb
       
-    # RECOMENDADO: Simplifica muito a rede e a comunicação com a interface gráfica.
     network_mode: "host"
     ipc: "host"
     
