@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
     ros-jazzy-camera-info-manager \
     ros-jazzy-depth-image-proc \
     ros-jazzy-image-tools \
+    ros-jazzy-rqt \
     && rm -rf /var/lib/apt/lists/*
 
 
