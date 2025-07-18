@@ -3,6 +3,7 @@ FROM ros:jazzy
 # As dependências são as mesmas, pois ambos os wrappers precisam do libfreenect e de ferramentas de build.
 RUN apt-get update && apt-get install -y \
     vim git cmake build-essential pkg-config libusb-1.0-0-dev freeglut3-dev \
+    less \
     python3-pip \
     python3-serial \
     ros-dev-tools \
